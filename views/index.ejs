@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trợ Lý Chọn Sách AI</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fafc;
+    }
+
+    /* Hiệu ứng thẻ sách */
+    .book-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .book-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px -8px rgba(59, 130, 246, 0.15), 0 4px 8px -4px rgba(59, 130, 246, 0.1);
+      border-color: #bfdbfe;
+    }
+
+    /* Spinner Loading */
+    .loader {
+      border: 3px solid #e2e8f0;
+      border-top: 3px solid #3b82f6;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- Header & Vùng Lọc -->
+  <header class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-30">
+    <div
+      class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+
+      <!-- Logo & Tiêu đề -->
+      <div class="flex items-center gap-3 w-full md:w-auto">
+        <img src="https://ibrand.vn/wp-content/uploads/2024/10/0937d299800010825d6df3e2ce382d83-1.png" alt="Logo"
+          class="h-10 md:h-12 object-contain"
+          onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMzYjgyZjYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNNCAxOS41di0xNUEyLjUgMi41IDAgMCAxIDYuNSAySDIwdjIwSDYuNWEyLjUgMi41IDAgMCAxIDAtNUgyMCIvPjwvc3ZnPg=='">
+        <div>
+          <a href="">
+            <h1 class="text-xl font-bold text-slate-900 tracking-tight leading-none">Thư Viện Thông Minh</h1>
+          </a>
+          <p class="text-xs text-slate-500 mt-1 font-medium">Khám phá & Nhận tư vấn bằng AI</p>
+        </div>
+      </div>
+      <!-- Tìm kiếm thủ công -->
+      <div class="w-full md:flex-1 md:max-w-4xl">
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[150px_190px_minmax(240px,1fr)_auto_auto] gap-2 w-full">
+          <select id="searchMode" aria-label="Chế độ tìm kiếm"
+            class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white">
+            <option value="title">Tên sách</option>
+            <option value="author">Tác giả</option>
+          </select>
+
+          <select id="typeFilter" aria-label="Lọc theo thể loại"
+            class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white">
+            <option value="">Tất cả thể loại</option>
+          </select>
+
+          <input id="manualSearchInput" type="text" placeholder="Nhập tên sách cần tìm..."
+            class="min-w-0 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white">
+
+          <button type="button" onclick="manualSearch()"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold whitespace-nowrap">Tìm
+            kiếm</button>
+
+          <button type="button" onclick="showRandomBook()"
+            class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap">Chọn
+            ngẫu nhiên</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Nội dung chính -->
+  <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 relative">
+
+    <!-- Trạng thái Loading ban đầu -->
+    <div id="initialLoading" class="flex flex-col items-center justify-center py-24 space-y-4">
+      <div class="loader"></div>
+      <p class="text-slate-500 font-medium text-sm animate-pulse">Đang tải dữ liệu thư viện ...</p>
+    </div>
+
+    <!-- Trạng thái Lỗi -->
+    <div id="errorState"
+      class="hidden flex-col items-center justify-center py-16 bg-red-50 rounded-2xl border border-red-100 text-center px-4">
+      <div class="bg-red-100 p-3 rounded-full mb-4">
+        <svg class="w-8 h-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      </div>
+      <h3 class="text-lg font-bold text-red-900">Không thể tải dữ liệu thư viện</h3>
+      <p class="text-sm text-red-600 max-w-md mt-2" id="errorText">Vui lòng kiểm tra file databookT35.json trong thư mục
+        public/data.</p>
+      <button onclick="loadBooksData()"
+        class="mt-6 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-sm font-semibold transition-colors shadow-sm">Thử
+        lại ngay</button>
+    </div>
+
+    <!-- Tiêu đề Kết quả -->
+    <div id="resultStats" class="hidden flex items-center justify-between mb-6">
+      <h2 class="text-lg font-bold text-slate-800">Gợi ý cho bạn</h2>
+      <span class="text-xs font-semibold px-3 py-1 bg-blue-50 text-blue-600 rounded-full border border-blue-100">
+        <span id="countDisplay">0</span> / <span id="totalCountDisplay">0</span> cuốn sách
+      </span>
+    </div>
+
+    <!-- Lưới Sách -->
+    <div id="bookGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 hidden">
+      <!-- Thẻ sách sẽ được render tại đây -->
+    </div>
+
+    <!-- Trạng thái Không có kết quả -->
+    <div id="noResult"
+      class="hidden flex-col items-center justify-center py-20 text-center bg-white rounded-2xl border border-slate-100 shadow-sm">
+      <div class="bg-slate-50 p-4 rounded-full mb-4">
+        <svg class="w-8 h-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+        </svg>
+      </div>
+      <h3 class="text-lg font-bold text-slate-800">Chưa tìm thấy sách phù hợp</h3>
+      <p class="text-slate-500 mt-1.5 text-sm">Hãy thử thay đổi từ khóa hoặc điều chỉnh bộ lọc để xem thêm.</p>
+      <button onclick="showRandomBook()"
+        class="mt-5 px-4 py-2 text-blue-600 bg-blue-50 hover:bg-blue-100 font-semibold text-sm rounded-lg transition-colors">Chọn
+        ngẫu nhiên một cuốn sách</button>
+    </div>
+    <div class="text-center mt-8"><button id="loadMoreBtn" type="button"
+        class="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors">Xem
+        thêm 50 cuốn sách</button></div>
+  </main>
+
+  <!-- Modal AI -->
+  <div id="aiModal"
+    class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6 opacity-0 pointer-events-none transition-all duration-300">
+    <div
+      class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh] overflow-hidden"
+      id="aiModalContent">
+
+      <!-- Modal Header -->
+      <div class="relative bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white shrink-0">
+        <button onclick="closeModal()"
+          class="absolute top-4 right-4 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-colors">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        <div class="flex items-center gap-2 text-blue-100 font-medium text-xs mb-2 tracking-wider">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+          </svg>
+          AI PHÂN TÍCH
+        </div>
+        <h2 id="modalBookTitle" class="text-2xl font-bold leading-tight mb-1">Tên sách</h2>
+        <p id="modalBookAuthor" class="text-blue-100 text-sm font-medium">Tác giả</p>
+        <div class="flex flex-wrap gap-2 mt-4" id="modalTagsInfo">
+          <!-- Tags -->
+        </div>
+      </div>
+
+      <!-- Modal Body (AI Content) -->
+      <div class="p-6 overflow-y-auto bg-slate-50 flex-grow relative">
+
+        <!-- Loading AI -->
+        <div id="aiLoading" class="flex flex-col items-center justify-center py-10 gap-4">
+          <div class="relative w-16 h-16">
+            <div class="absolute inset-0 border-4 border-blue-200 rounded-full"></div>
+            <div class="absolute inset-0 border-4 border-blue-600 rounded-full border-t-transparent animate-spin"></div>
+          </div>
+          <p class="text-sm font-medium text-slate-600 animate-pulse">Trợ lý AI đang phân tích nội dung sách...</p>
+        </div>
+
+        <!-- Lỗi AI -->
+        <div id="aiError" class="hidden flex-col items-center justify-center py-8 text-center">
+          <div class="bg-orange-100 p-3 rounded-full mb-3">
+            <svg class="w-6 h-6 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <p id="aiErrorText" class="text-sm text-slate-700 font-medium"></p>
+        </div>
+
+        <!-- Kết quả AI -->
+        <div id="aiResultText"
+          class="hidden prose prose-slate prose-sm sm:prose-base max-w-none text-slate-700 leading-relaxed">
+          <!-- Text from AI injected here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/javascripts/script.js"></script>
+</body>
+
+</html>
