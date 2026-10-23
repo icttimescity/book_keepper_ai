@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản trị thư viện</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800">
+  <header class="bg-white border-b sticky top-0 z-20">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between gap-3">
+      <div>
+        <h1 class="text-xl font-bold">Quản trị thư viện</h1>
+        <p class="text-xs text-slate-500">
+          Đăng nhập: <b><%= sessionUser?.displayName || sessionUser?.username %></b>
+          · <%= sessionUser?.role === 'admin' ? 'Admin chính' : 'Quản lý' %>
+        </p>
+      </div>
+      <div class="flex gap-2">
+        <a href="/" class="px-3 py-2 rounded-lg bg-slate-100 text-sm font-semibold">Trang học sinh</a>
+        <form method="post" action="/admin/logout"><button class="px-3 py-2 rounded-lg bg-red-50 text-red-700 text-sm font-semibold">Đăng xuất</button></form>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto p-4 space-y-4">
+    <% if (!secretConfigured) { %>
+      <div class="bg-amber-50 border border-amber-200 text-amber-800 rounded-xl p-4 text-sm">
+        Chưa có <b>SUPABASE_SECRET_KEY</b>. Các nút ghi dữ liệu sẽ báo lỗi cho tới khi điền Secret key vào <code>.env</code>.
+      </div>
+    <% } %>
+
+    <section class="bg-white rounded-2xl border p-4">
+      <div class="flex flex-col lg:flex-row gap-2">
+        <select id="adminSearchMode" class="border rounded-lg px-3 py-2"><option value="title">Tên sách</option><option value="author">Tác giả</option></select>
+        <input id="adminSearch" class="border rounded-lg px-3 py-2 flex-1" placeholder="Từ khóa...">
+        <button id="adminSearchBtn" class="bg-blue-600 text-white rounded-lg px-4 py-2 font-semibold">Tìm</button>
+        <button id="addBookBtn" class="bg-emerald-600 text-white rounded-lg px-4 py-2 font-semibold">+ Thêm sách</button>
+      </div>
+    </section>
+
+    <section class="bg-white rounded-2xl border p-4">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-3">
+        <div>
+          <h2 class="font-bold">Import sách bằng file</h2>
+          <p class="text-xs text-slate-500">Chọn file trước, sau đó chọn rõ <b>Thêm mới</b> hoặc <b>Sửa / cập nhật</b>. Hệ thống tự chia batch 500 bản ghi.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-2 sm:items-center">
+          <a href="/admin/template/books.csv" class="inline-flex justify-center items-center px-4 py-2 rounded-lg bg-emerald-50 text-emerald-700 font-semibold text-sm border border-emerald-200 hover:bg-emerald-100">↓ Tải CSV mẫu</a>
+          <input id="importFile" type="file" accept=".json,.csv,application/json,text/csv" class="text-sm">
+        </div>
+      </div>
+      <div class="text-xs text-slate-500 mb-3">CSV bắt buộc có đúng 8 cột: <code>No, Title, Author, Year, Publisher, Types, Shelf, Position</code>.</div>
+
+      <div id="importModePanel" class="hidden grid md:grid-cols-2 gap-3 mb-3">
+        <button type="button" id="importAddBtn" class="text-left border-2 border-emerald-200 hover:border-emerald-400 bg-emerald-50 rounded-xl p-4 transition">
+          <div class="font-bold text-emerald-800">＋ Thêm mới</div>
+          <div class="text-xs text-emerald-700 mt-1">Không sửa dữ liệu cũ. Hệ thống bỏ qua No trong file và tự đánh No mới liên tiếp từ số lớn nhất hiện có + 1.</div>
+        </button>
+        <button type="button" id="importUpdateBtn" class="text-left border-2 border-amber-200 hover:border-amber-400 bg-amber-50 rounded-xl p-4 transition">
+          <div class="font-bold text-amber-800">✎ Sửa</div>
+          <div class="text-xs text-amber-700 mt-1">Dùng No trong file để đối chiếu: No trùng sẽ cập nhật bản ghi cũ; No chưa có sẽ được thêm mới.</div>
+        </button>
+      </div>
+
+      <div id="importFileInfo" class="hidden text-sm bg-slate-50 border rounded-lg p-3 mb-2"></div>
+      <div id="importStatus" class="text-sm text-slate-600"></div>
+    </section>
+
+    <% if (canManageUsers) { %>
+    <section class="bg-white rounded-2xl border p-4" id="managerSection">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
+        <div>
+          <h2 class="font-bold">Tài khoản quản lý</h2>
+          <p class="text-xs text-slate-500">Các tài khoản này có thể đăng nhập /admin và chỉnh sửa dữ liệu sách. Chỉ Admin chính được quản lý tài khoản.</p>
+        </div>
+        <button id="addManagerBtn" class="bg-indigo-600 text-white rounded-lg px-4 py-2 font-semibold text-sm">+ Thêm quản lý</button>
+      </div>
+      <div id="managerSetupNotice" class="hidden bg-amber-50 border border-amber-200 text-amber-800 rounded-lg p-3 text-sm mb-3">
+        Chưa khởi tạo bảng <b>manager_users</b>. Hãy mở Supabase → SQL Editor và chạy file <code>supabase/manager_users.sql</code> trong project này một lần. <a class="underline font-semibold" href="/admin/template/manager-users.sql">Tải file SQL khởi tạo</a>.
+      </div>
+      <div id="managerStatus" class="text-sm text-slate-500 mb-2"></div>
+      <div class="overflow-auto">
+        <table class="min-w-full text-sm">
+          <thead class="bg-slate-50 text-left"><tr><th class="p-3">Tài khoản</th><th class="p-3">Tên hiển thị</th><th class="p-3">Trạng thái</th><th class="p-3">Thao tác</th></tr></thead>
+          <tbody id="managerTable"></tbody>
+        </table>
+      </div>
+    </section>
+    <% } %>
+
+    <section class="bg-white rounded-2xl border overflow-hidden">
+      <div class="p-4 flex items-center justify-between"><h2 class="font-bold">Danh sách sách</h2><span id="adminCount" class="text-sm text-slate-500"></span></div>
+      <div class="overflow-auto">
+        <table class="min-w-full text-sm">
+          <thead class="bg-slate-50 text-left"><tr><th class="p-3">No</th><th class="p-3">Tên sách</th><th class="p-3">Tác giả</th><th class="p-3">Thể loại</th><th class="p-3">Tủ</th><th class="p-3">Vị trí</th><th class="p-3">Thao tác</th></tr></thead>
+          <tbody id="adminTable"></tbody>
+        </table>
+      </div>
+      <div class="p-4 border-t bg-slate-50/60">
+        <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3">
+          <div id="adminPageInfo" class="text-sm text-slate-600"></div>
+          <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+            <div id="adminPagination" class="flex flex-wrap items-center gap-1"></div>
+            <div class="flex items-center gap-2 sm:ml-2">
+              <label for="adminGotoPage" class="text-xs text-slate-500 whitespace-nowrap">Đi đến trang</label>
+              <input id="adminGotoPage" type="number" min="1" class="w-20 border rounded-lg px-2 py-2 text-sm" inputmode="numeric">
+              <button id="adminGotoBtn" type="button" class="bg-slate-800 text-white rounded-lg px-3 py-2 text-sm font-semibold">Đi</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="bookDialog" class="fixed inset-0 bg-black/40 hidden items-center justify-center p-4 z-50">
+    <form id="bookForm" class="bg-white rounded-2xl w-full max-w-2xl p-5 max-h-[90vh] overflow-auto">
+      <div class="flex justify-between items-center mb-4"><h3 id="formTitle" class="font-bold text-lg">Thêm sách</h3><button type="button" id="closeDialog" class="text-slate-500">✕</button></div>
+      <input type="hidden" id="originalNo">
+
+      <div id="manualModePanel" class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+        <button type="button" id="manualAddMode" class="text-left border-2 border-emerald-300 bg-emerald-50 rounded-xl p-3 transition">
+          <div class="font-bold text-emerald-800">+ Thêm mới</div>
+          <div class="text-xs text-emerald-700 mt-1">Không sửa dữ liệu cũ. Hệ thống tự cấp No mới tiếp theo, kể cả khi No nhập trong form bị trùng.</div>
+        </button>
+        <button type="button" id="manualUpdateMode" class="text-left border-2 border-slate-200 bg-white hover:border-amber-300 rounded-xl p-3 transition">
+          <div class="font-bold text-amber-800">✎ Sửa / cập nhật</div>
+          <div class="text-xs text-slate-600 mt-1">Dùng No để đối chiếu: No đã có sẽ được sửa; No chưa có sẽ được thêm mới.</div>
+        </button>
+      </div>
+      <div id="manualModeHint" class="text-xs rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 px-3 py-2 mb-3">Chế độ Thêm mới: No trong form chỉ để tham khảo; hệ thống sẽ tự cấp No tiếp theo để không ghi đè sách cũ.</div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <label class="text-sm">No<input id="fNo" type="number" min="1" class="mt-1 w-full border rounded-lg px-3 py-2"></label>
+        <label class="text-sm">Năm<input id="fYear" type="number" class="mt-1 w-full border rounded-lg px-3 py-2" required></label>
+        <label class="text-sm md:col-span-2">Tên sách<input id="fTitle" class="mt-1 w-full border rounded-lg px-3 py-2" required></label>
+        <label class="text-sm md:col-span-2">Tác giả<input id="fAuthor" class="mt-1 w-full border rounded-lg px-3 py-2" required></label>
+        <label class="text-sm md:col-span-2">Nhà xuất bản<input id="fPublisher" class="mt-1 w-full border rounded-lg px-3 py-2" required></label>
+        <label class="text-sm">Thể loại<input id="fTypes" class="mt-1 w-full border rounded-lg px-3 py-2" required></label>
+        <label class="text-sm">Tủ<input id="fShelf" class="mt-1 w-full border rounded-lg px-3 py-2" required></label>
+        <label class="text-sm">Vị trí<input id="fPosition" type="number" min="0" class="mt-1 w-full border rounded-lg px-3 py-2" required></label>
+      </div>
+      <div id="formError" class="text-sm text-red-600 mt-3"></div>
+      <div class="flex justify-end gap-2 mt-5"><button type="button" id="cancelDialog" class="px-4 py-2 bg-slate-100 rounded-lg">Hủy</button><button id="saveBookBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold">Thêm mới</button></div>
+    </form>
+  </div>
+
+  <% if (canManageUsers) { %>
+  <div id="managerDialog" class="fixed inset-0 bg-black/40 hidden items-center justify-center p-4 z-50">
+    <form id="managerForm" class="bg-white rounded-2xl w-full max-w-lg p-5">
+      <div class="flex justify-between items-center mb-4"><h3 id="managerFormTitle" class="font-bold text-lg">Thêm quản lý</h3><button type="button" id="closeManagerDialog" class="text-slate-500">✕</button></div>
+      <input type="hidden" id="managerId">
+      <label class="block text-sm mb-3">Tài khoản<input id="managerUsername" class="mt-1 w-full border rounded-lg px-3 py-2" placeholder="vd: quanly01" required></label>
+      <label class="block text-sm mb-3">Tên hiển thị<input id="managerDisplayName" class="mt-1 w-full border rounded-lg px-3 py-2" placeholder="vd: Cô Lan" required></label>
+      <label class="block text-sm mb-3">Mật khẩu<input id="managerPassword" type="password" class="mt-1 w-full border rounded-lg px-3 py-2" placeholder="Khi sửa có thể để trống để giữ mật khẩu cũ"></label>
+      <label class="flex gap-2 items-center text-sm mb-3"><input id="managerActive" type="checkbox" checked> Cho phép đăng nhập</label>
+      <div id="managerFormError" class="text-sm text-red-600 mt-3"></div>
+      <div class="flex justify-end gap-2 mt-5"><button type="button" id="cancelManagerDialog" class="px-4 py-2 bg-slate-100 rounded-lg">Hủy</button><button class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold">Lưu</button></div>
+    </form>
+  </div>
+  <% } %>
+
+  <script>window.CAN_MANAGE_USERS = <%- JSON.stringify(Boolean(canManageUsers)) %>;</script>
+  <script src="/javascripts/admin.js"></script>
+</body>
+</html>

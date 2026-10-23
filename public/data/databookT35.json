@@ -12580,7 +12580,7 @@
       "Publisher": "Thế Giới.",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 1259,
@@ -16860,7 +16860,7 @@
       "Publisher": "Thế Giới,",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 1687,
@@ -17120,7 +17120,7 @@
       "Publisher": "Thế giới.",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 1713,
@@ -17130,7 +17130,7 @@
       "Publisher": "Thế giới.",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 1714,
@@ -17150,7 +17150,7 @@
       "Publisher": "Thế giới.",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 1716,
@@ -17360,7 +17360,7 @@
       "Publisher": "Thế giới.",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 1737,
@@ -17370,7 +17370,7 @@
       "Publisher": "Thế giới,",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 1738,
@@ -17380,7 +17380,7 @@
       "Publisher": "Thế giới.",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 1739,
@@ -17420,7 +17420,7 @@
       "Publisher": "Thế giới.",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 1743,
@@ -17460,7 +17460,7 @@
       "Publisher": "Thế giới.",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 1747,
@@ -23340,7 +23340,7 @@
       "Publisher": "Văn hóa - Thông tin,",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 2335,
@@ -25410,7 +25410,7 @@
       "Publisher": "Tổng hợp TP.Hồ Chí Minh,",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 2542,
@@ -30290,7 +30290,7 @@
       "Publisher": "Dân Trí.",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 3030,
@@ -30300,7 +30300,7 @@
       "Publisher": "Văn học ; Công ty Sách Alpha",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 3031,
@@ -30310,7 +30310,7 @@
       "Publisher": "Dân trí ; Công ty Sách Alpha;",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 3032,
@@ -30370,7 +30370,7 @@
       "Publisher": "Văn học ; Công ty Sách Alpha",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 3038,
@@ -31830,7 +31830,7 @@
       "Publisher": "Kim Đồng,",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 3184,
@@ -31890,7 +31890,7 @@
       "Publisher": "Kim Đồng,",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 3190,
@@ -34610,7 +34610,7 @@
       "Publisher": "Kim Đồng.",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 3462,
@@ -34620,7 +34620,7 @@
       "Publisher": "Kim Đồng.",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 3463,
@@ -34630,7 +34630,7 @@
       "Publisher": "Kim Đồng",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 3464,
@@ -37890,7 +37890,7 @@
       "Publisher": "Kim Đồng.",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 3790,
@@ -40250,7 +40250,7 @@
       "Publisher": "Cengage Learning, Inc,",
       "Types": "Tham khảo cho giáo viên bằng Tếng Anh",
       "Shelf": "TKTA GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4026,
@@ -40260,7 +40260,7 @@
       "Publisher": "Cengage Learning,",
       "Types": "Tham khảo cho giáo viên bằng Tếng Anh",
       "Shelf": "TKTA GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4027,
@@ -40270,7 +40270,7 @@
       "Publisher": "Cengage Learning, Inc,",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4028,
@@ -40280,7 +40280,7 @@
       "Publisher": "Cengage Learning, Inc,",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4029,
@@ -40290,7 +40290,7 @@
       "Publisher": "Cengage Learning, Inc,",
       "Types": "Tham khảo cho giáo viên bằng Tếng Anh",
       "Shelf": "TKTA GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4030,
@@ -40300,7 +40300,7 @@
       "Publisher": "National Geographic Learning.",
       "Types": "Tham khảo cho giáo viên bằng Tếng Anh",
       "Shelf": "TKTA GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4031,
@@ -40310,7 +40310,7 @@
       "Publisher": "Cengage Learning, Inc,",
       "Types": "Tham khảo cho giáo viên bằng Tếng Anh",
       "Shelf": "TKTA GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4032,
@@ -40320,7 +40320,7 @@
       "Publisher": "Cengage Learning, Inc,",
       "Types": "Tham khảo cho giáo viên bằng Tếng Anh",
       "Shelf": "TKTA GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4033,
@@ -40617,7 +40617,7 @@
       "Title": "Our World 4: Grammar Workbook",
       "Author": "National Geographic.",
       "Year": 2016,
-      "Publisher": "",
+      "Publisher": "Đang cập nhật",
       "Types": "Tiếng anh",
       "Shelf": "Xanh lá cây",
       "Position": 15
@@ -40627,7 +40627,7 @@
       "Title": "Our World 2: Grammar Workbook",
       "Author": "National Geographic.",
       "Year": 2016,
-      "Publisher": "",
+      "Publisher": "Đang cập nhật",
       "Types": "Tiếng anh",
       "Shelf": "Xanh lá cây",
       "Position": 14
@@ -40637,7 +40637,7 @@
       "Title": "Our World 5: Grammar Workbook",
       "Author": "National Geographic.",
       "Year": 2016,
-      "Publisher": "",
+      "Publisher": "Đang cập nhật",
       "Types": "Tiếng anh",
       "Shelf": "Xanh lá cây",
       "Position": 15
@@ -40647,7 +40647,7 @@
       "Title": "Our World 3: Grammar Workbook",
       "Author": "National Geographic.",
       "Year": 2016,
-      "Publisher": "",
+      "Publisher": "Đang cập nhật",
       "Types": "Tiếng anh",
       "Shelf": "Xanh lá cây",
       "Position": 15
@@ -40660,7 +40660,7 @@
       "Publisher": "Oxford University Press,",
       "Types": "Tham khảo cho giáo viên bằng Tếng Anh",
       "Shelf": "TKTA GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4067,
@@ -40670,7 +40670,7 @@
       "Publisher": "National Geographic Learning.",
       "Types": "Tham khảo cho giáo viên bằng Tếng Anh",
       "Shelf": "TKTA GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4068,
@@ -40680,7 +40680,7 @@
       "Publisher": "Cengage Learning, Inc,",
       "Types": "Tham khảo cho giáo viên bằng Tếng Anh",
       "Shelf": "TKTA GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4069,
@@ -40690,7 +40690,7 @@
       "Publisher": "National Geographic Learning.",
       "Types": "Tham khảo cho giáo viên bằng Tếng Anh",
       "Shelf": "TKTA GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4070,
@@ -40700,7 +40700,7 @@
       "Publisher": "Cengage Learning,",
       "Types": "Tham khảo cho giáo viên bằng Tếng Anh",
       "Shelf": "TKTA GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4071,
@@ -40710,7 +40710,7 @@
       "Publisher": "Cengage Learning, Inc,",
       "Types": "Tham khảo cho giáo viên bằng Tếng Anh",
       "Shelf": "TKTA GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4072,
@@ -40720,7 +40720,7 @@
       "Publisher": "Cengage Learning, Inc,",
       "Types": "Tham khảo cho giáo viên bằng Tếng Anh",
       "Shelf": "TKTA GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4073,
@@ -40730,7 +40730,7 @@
       "Publisher": "Cengage Learning, Inc,",
       "Types": "Tham khảo cho giáo viên bằng Tếng Anh",
       "Shelf": "TKTA GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4074,
@@ -40740,7 +40740,7 @@
       "Publisher": "Cengage Learning, Inc,",
       "Types": "Tham khảo cho giáo viên bằng Tếng Anh",
       "Shelf": "TKTA GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4075,
@@ -40750,7 +40750,7 @@
       "Publisher": "Cengage Learning, Inc,",
       "Types": "Tham khảo cho giáo viên bằng Tếng Anh",
       "Shelf": "TKTA GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4076,
@@ -46570,7 +46570,7 @@
       "Publisher": "Kim Đồng.",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4658,
@@ -46710,7 +46710,7 @@
       "Publisher": "Dreamscape Media",
       "Types": "Tham khảo cho giáo viên bằng Tếng Anh",
       "Shelf": "TKTA GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4672,
@@ -46720,7 +46720,7 @@
       "Publisher": "Cengage Learning, Inc,",
       "Types": "Tham khảo cho giáo viên bằng Tếng Anh",
       "Shelf": "TKTA GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4673,
@@ -46730,7 +46730,7 @@
       "Publisher": "Cengage Learning, Inc,",
       "Types": "Tham khảo cho giáo viên bằng Tếng Anh",
       "Shelf": "TKTA GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4674,
@@ -46740,7 +46740,7 @@
       "Publisher": "Cengage Learning Australia,",
       "Types": "Tham khảo cho giáo viên bằng Tếng Anh",
       "Shelf": "TKTA GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4675,
@@ -47095,7 +47095,7 @@
     {
       "No": 4710,
       "Title": "Children's illustrated thesaurus.",
-      "Author": "",
+      "Author": "Đang cập nhật",
       "Year": 2017,
       "Publisher": "DK Pub.,",
       "Types": "Tiếng anh",
@@ -47115,7 +47115,7 @@
     {
       "No": 4712,
       "Title": "Beginner's world atlas.",
-      "Author": "",
+      "Author": "Đang cập nhật",
       "Year": 2019,
       "Publisher": "National Geographic,",
       "Types": "Tiếng anh",
@@ -47125,7 +47125,7 @@
     {
       "No": 4713,
       "Title": "First how things work encyclopedia : A first reference book for children.",
-      "Author": "",
+      "Author": "Đang cập nhật",
       "Year": 2019,
       "Publisher": "DK Publishing,",
       "Types": "Tiếng anh",
@@ -47475,7 +47475,7 @@
     {
       "No": 4748,
       "Title": "Dinosaurs: a visual encyclopedia.",
-      "Author": "",
+      "Author": "Đang cập nhật",
       "Year": 2018,
       "Publisher": "DK Publishing/Penguin Random House,",
       "Types": "Tiếng anh",
@@ -47615,7 +47615,7 @@
     {
       "No": 4762,
       "Title": "Weird but true! : $b animals : 300 outrageous facts about wacky wildlife.",
-      "Author": "",
+      "Author": "Đang cập nhật",
       "Year": 2018,
       "Publisher": "National Geographic Kids,",
       "Types": "Tiếng anh",
@@ -48660,7 +48660,7 @@
       "Publisher": "Dreamscape Media",
       "Types": "Tham khảo cho giáo viên bằng Tếng Anh",
       "Shelf": "TKTA GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 4867,
@@ -64328,8 +64328,8 @@
       "Author": "Kyowon",
       "Year": 2023,
       "Publisher": "Hồng Đức",
-      "Types": "Truyện tranh",
-      "Shelf": "",
+      "Types": "#N/A",
+      "Shelf": "Đang cập nhật",
       "Position": 0
     },
     {
@@ -70110,7 +70110,7 @@
       "Publisher": "Kim Đồng",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 7012,
@@ -70580,7 +70580,7 @@
       "Publisher": "NXB Hà Nội,",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 7059,
@@ -70840,7 +70840,7 @@
       "Publisher": "Thế Giới",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 7085,
@@ -72940,7 +72940,7 @@
       "Publisher": "Mc Graw Hill",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 7295,
@@ -72950,7 +72950,7 @@
       "Publisher": "Mc Graw Hill",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 7296,
@@ -72960,7 +72960,7 @@
       "Publisher": "Mc Graw Hill",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 7297,
@@ -72970,7 +72970,7 @@
       "Publisher": "Mc Graw Hill",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 7298,
@@ -72980,7 +72980,7 @@
       "Publisher": "Mc Graw Hill",
       "Types": "Tham khảo cho giáo viên",
       "Shelf": "TK GV",
-      "Position": "GV"
+      "Position": 0
     },
     {
       "No": 7299,
@@ -76118,8 +76118,8 @@
       "Author": "Bo Wocheng",
       "Year": 2024,
       "Publisher": "Kim đồng,",
-      "Types": "Sách khoa học",
-      "Shelf": "",
+      "Types": "#N/A",
+      "Shelf": "Đang cập nhật",
       "Position": 0
     },
     {
