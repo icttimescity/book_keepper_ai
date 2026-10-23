@@ -1,9 +1,9 @@
 const DEFAULT_TIMEOUT_MS = Number(process.env.SUPABASE_TIMEOUT_MS || 6000);
 
 function getConfig(keyMode = 'public') {
-  const url = (process.env.SUPABASE_URL || '').replace(/\/$/, '');
-  const publicKey = process.env.SUPABASE_PUBLISHABLE_KEY || '';
-  const secretKey = process.env.SUPABASE_SECRET_KEY || '';
+  const url = (process.env.SUPABASE_URL || '').trim().replace(/\/$/, '');
+  const publicKey = (process.env.SUPABASE_PUBLISHABLE_KEY || '').trim();
+  const secretKey = (process.env.SUPABASE_SECRET_KEY || '').trim();
   const key = keyMode === 'admin' ? secretKey : publicKey;
 
   if (!url) throw new Error('Chưa cấu hình SUPABASE_URL');
@@ -13,7 +13,7 @@ function getConfig(keyMode = 'public') {
       : 'Chưa cấu hình SUPABASE_PUBLISHABLE_KEY');
   }
 
-  return { url, key };
+  return { url, key, keyMode };
 }
 
 function parseTotal(contentRange, fallbackLength) {
@@ -45,6 +45,7 @@ async function supabaseTableRequest(table, method = 'GET', params = {}, body, op
 
   try {
     const headers = {
+      // New sb_publishable_/sb_secret_ keys must be sent in the apikey header.
       apikey: key,
       Accept: 'application/json'
     };
@@ -67,9 +68,13 @@ async function supabaseTableRequest(table, method = 'GET', params = {}, body, op
 
     if (!response.ok) {
       const message = data?.message || data?.error || data?.hint || text || `HTTP ${response.status}`;
-      const error = new Error(`Supabase: ${message}`);
+      const unregistered = response.status === 401 && /unregistered api key/i.test(String(message));
+      const projectRef = new URL(url).hostname.split('.')[0];
+      const error = new Error(unregistered
+        ? `Supabase: API key ${keyMode === 'admin' ? 'Secret' : 'Publishable'} không được project hiện tại chấp nhận (Unregistered API key). Hãy copy lại đúng ${keyMode === 'admin' ? 'SUPABASE_SECRET_KEY' : 'SUPABASE_PUBLISHABLE_KEY'} của project ${projectRef} trong Settings > API Keys rồi khởi động lại ứng dụng.`
+        : `Supabase: ${message}`);
       error.status = response.status;
-      error.code = data?.code || '';
+      error.code = unregistered ? 'SUPABASE_UNREGISTERED_API_KEY' : (data?.code || '');
       throw error;
     }
 
@@ -103,9 +108,32 @@ async function supabaseWrite(method, params = {}, body, options = {}) {
   return result.data;
 }
 
+async function testSupabaseConnection(keyMode = 'public') {
+  const table = keyMode === 'admin' ? 'manager_users' : 'books';
+  try {
+    await supabaseTableRequest(
+      table,
+      'GET',
+      { select: keyMode === 'admin' ? 'id' : 'No', limit: 1 },
+      undefined,
+      { keyMode, timeoutMs: 8000 }
+    );
+    return { ok: true, keyMode };
+  } catch (error) {
+    return {
+      ok: false,
+      keyMode,
+      code: error.code || '',
+      status: error.status || 0,
+      error: error.message
+    };
+  }
+}
+
 module.exports = {
   getConfig,
   supabaseTableRequest,
   supabaseSelect,
-  supabaseWrite
+  supabaseWrite,
+  testSupabaseConnection
 };

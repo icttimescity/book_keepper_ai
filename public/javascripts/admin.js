@@ -12,7 +12,67 @@ const EXPECTED_BOOK_HEADERS = ['No', 'Title', 'Author', 'Year', 'Publisher', 'Ty
 const $ = (id) => document.getElementById(id);
 const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 
+
+let supabaseStatusTimer = null;
+
+function showSupabaseStatus(message, tone = 'success', duration = 4500) {
+  const box = $('supabaseKeyStatus');
+  if (!box) return;
+
+  if (supabaseStatusTimer) clearTimeout(supabaseStatusTimer);
+
+  const toneClass = tone === 'success'
+    ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+    : tone === 'error'
+      ? 'bg-red-50 border-red-200 text-red-800'
+      : 'bg-amber-50 border-amber-200 text-amber-800';
+
+  box.className = `fixed top-20 right-4 z-50 max-w-xl rounded-xl px-4 py-3 text-sm border shadow-lg ${toneClass}`;
+  box.textContent = message;
+  box.classList.remove('hidden');
+
+  if (duration > 0) {
+    supabaseStatusTimer = setTimeout(() => {
+      box.classList.add('hidden');
+      box.textContent = '';
+    }, duration);
+  }
+}
+
+async function loadSupabaseStatus() {
+  try {
+    const res = await fetch('/admin/api/supabase-status', { cache: 'no-store' });
+    const data = await res.json();
+
+    if (data.public?.ok && data.admin?.ok) {
+      showSupabaseStatus(
+        `Supabase kết nối tốt · project ${data.projectRef || ''} · Publishable ✅ · Secret ✅`,
+        'success',
+        4500
+      );
+      return;
+    }
+
+    const parts = [];
+    parts.push(`Publishable ${data.public?.ok ? '✅' : '❌'}`);
+    parts.push(`Secret ${data.admin?.ok ? '✅' : '❌'}`);
+    const detail = data.public?.ok ? data.admin?.error : data.public?.error;
+    showSupabaseStatus(
+      `Supabase chưa sẵn sàng · project ${data.projectRef || 'không rõ'} · ${parts.join(' · ')}${detail ? ` · ${detail}` : ''}`,
+      'error',
+      8000
+    );
+  } catch (error) {
+    showSupabaseStatus(
+      `Không thể kiểm tra kết nối Supabase · ${error.message}`,
+      'warning',
+      8000
+    );
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  loadSupabaseStatus();
   $('adminSearchBtn').onclick = () => loadBooks(1);
   $('adminSearch').addEventListener('keydown', e => { if (e.key === 'Enter') loadBooks(1); });
   $('adminGotoBtn').onclick = goToTypedPage;

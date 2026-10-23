@@ -5,7 +5,11 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var fs = require('fs');
 
-// Load local .env before requiring routes/services. Existing process.env values win.
+// Load local .env before requiring routes/services.
+// This personal project intentionally treats the bundled .env as the source of truth
+// for local runs, so stale Windows/system environment variables cannot silently
+// override the Supabase keys stored in the project. On Vercel/production, platform
+// environment variables still win.
 var envPath = path.join(__dirname, '.env');
 if (fs.existsSync(envPath)) {
   fs.readFileSync(envPath, 'utf8').split(/\r?\n/).forEach(function(line) {
@@ -14,7 +18,11 @@ if (fs.existsSync(envPath)) {
     if (separator < 1) return;
     var key = line.slice(0, separator).trim();
     var value = line.slice(separator + 1).trim();
-    if (!process.env[key]) process.env[key] = value;
+    if (process.env.NODE_ENV === 'production') {
+      if (!process.env[key]) process.env[key] = value;
+    } else {
+      process.env[key] = value;
+    }
   });
 }
 

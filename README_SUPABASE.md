@@ -112,3 +112,31 @@ Nếu chế độ Thêm mới bị lỗi giữa các batch, giao diện giữ l�
 - Có thể bấm trực tiếp số trang, dùng nút trang trước/trang sau hoặc nhập số vào ô `Đi đến trang`.
 - Ví dụ với 8.335 cuốn: 84 trang; trang 4 hiển thị bản ghi thứ 301-400; trang cuối hiển thị phần còn lại.
 - Khi tìm kiếm, phân trang được tính lại theo tổng số kết quả tìm kiếm.
+
+## Chẩn đoán lỗi `Unregistered API key`
+
+Bản này có lệnh kiểm tra riêng:
+
+```bash
+npm run check:supabase
+```
+
+Kết quả sẽ tách riêng `Publishable` và `Secret`.
+
+- `Publishable: OK`, `Secret: FAIL - ... Unregistered API key`: Secret key không được project trong `SUPABASE_URL` chấp nhận. Mở Supabase -> Settings -> API Keys và copy lại `sb_secret_...` đúng của project này.
+- Cả hai đều FAIL: kiểm tra `SUPABASE_URL` và chắc chắn URL/key thuộc cùng một project.
+- Admin chính từ `.env` luôn đăng nhập cục bộ, không phụ thuộc kết nối Supabase.
+
+Khi chạy local, `.env` trong project được ưu tiên để tránh biến môi trường cũ trên Windows ghi đè key. Khi chạy production (`NODE_ENV=production`), biến môi trường của nền tảng vẫn được ưu tiên.
+
+## `.env` và `.env.example`
+
+Hai file phải có cùng danh sách biến và cùng thứ tự. `.env` chứa giá trị đang chạy thật; `.env.example` chỉ là mẫu để biết cần cấu hình những biến nào, nên giá trị key trong `.env.example` là placeholder.
+
+Project hiện chỉ dùng ba biến Supabase sau:
+
+- `SUPABASE_URL`
+- `SUPABASE_PUBLISHABLE_KEY`
+- `SUPABASE_SECRET_KEY`
+
+Không còn dùng biến `SUPABASE_SERVICE_ROLE_KEY` làm fallback. Lưu ý: từ `service_role` vẫn xuất hiện trong file SQL `manager_users.sql` vì đó là **Postgres role** mà Supabase Secret key ánh xạ tới, không phải một biến môi trường khác.

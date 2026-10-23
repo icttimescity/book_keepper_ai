@@ -2,7 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const router = express.Router();
-const { supabaseWrite, supabaseTableRequest } = require('../services/supabaseRest');
+const { supabaseWrite, supabaseTableRequest, testSupabaseConnection } = require('../services/supabaseRest');
 const { invalidateBookIndexCache } = require('../services/bookRepository');
 const {
   authenticateManager,
@@ -68,11 +68,13 @@ router.get('/', (req, res) => {
 
 router.post('/login', async (req, res) => {
   const username = String(req.body.username || '').trim();
-  const password = String(req.body.password || '');
-  const validUser = process.env.ADMIN_USERNAME || 'admin';
-  const validPass = process.env.ADMIN_PASSWORD || 'admin';
+  const password = String(req.body.password || '').trim();
+  const validUser = String(process.env.ADMIN_USERNAME || 'admin').trim();
+  const validPass = String(process.env.ADMIN_PASSWORD || 'admin').trim();
 
-  if (username === validUser && password === validPass) {
+  // Admin chính luôn được xác thực cục bộ từ .env và KHÔNG gọi Supabase.
+  // Username không phân biệt hoa/thường để tránh vô tình rơi sang nhánh manager.
+  if (username.toLowerCase() === validUser.toLowerCase() && password === validPass) {
     setAdminCookie(res, adminUserFromEnv());
     return res.redirect('/admin');
   }
@@ -129,6 +131,19 @@ router.get('/api/status', requireAdmin, (req, res) => {
       username: req.adminUser.username,
       displayName: req.adminUser.displayName
     }
+  });
+});
+
+router.get('/api/supabase-status', requireAdmin, async (_req, res) => {
+  const [publicResult, adminResult] = await Promise.all([
+    testSupabaseConnection('public'),
+    testSupabaseConnection('admin')
+  ]);
+  res.json({
+    success: publicResult.ok && adminResult.ok,
+    public: publicResult,
+    admin: adminResult,
+    projectRef: String(process.env.SUPABASE_URL || '').replace(/^https?:\/\//, '').split('.')[0] || ''
   });
 });
 
